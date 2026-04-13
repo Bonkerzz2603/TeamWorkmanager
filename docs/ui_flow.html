@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI Flow - Ứng Dụng Quản Lý Công Việc Nhóm</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a1a;
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 40px 20px 20px;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3e 50%, #0a0a1a 100%);
+            border-bottom: 1px solid rgba(67, 97, 238, 0.2);
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #4361ee, #7209b7, #06d6a0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #8888aa;
+            font-size: 1rem;
+            font-weight: 300;
+        }
+
+        /* Legend */
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            padding: 20px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: #aaa;
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        /* Flow Container */
+        .flow-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Section */
+        .flow-section {
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            padding-left: 16px;
+            border-left: 4px solid #4361ee;
+            color: #fff;
+        }
+
+        /* Flow Row */
+        .flow-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        /* Screen Card */
+        .screen-card {
+            width: 200px;
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .screen-card:hover {
+            transform: translateY(-6px) scale(1.03);
+            z-index: 10;
+        }
+
+        .screen-card.auth {
+            border: 2px solid rgba(67, 97, 238, 0.4);
+            background: linear-gradient(145deg, rgba(67, 97, 238, 0.08), rgba(67, 97, 238, 0.02));
+            box-shadow: 0 4px 20px rgba(67, 97, 238, 0.15);
+        }
+        .screen-card.auth:hover {
+            border-color: rgba(67, 97, 238, 0.8);
+            box-shadow: 0 8px 40px rgba(67, 97, 238, 0.3);
+        }
+
+        .screen-card.main {
+            border: 2px solid rgba(6, 214, 160, 0.4);
+            background: linear-gradient(145deg, rgba(6, 214, 160, 0.08), rgba(6, 214, 160, 0.02));
+            box-shadow: 0 4px 20px rgba(6, 214, 160, 0.15);
+        }
+        .screen-card.main:hover {
+            border-color: rgba(6, 214, 160, 0.8);
+            box-shadow: 0 8px 40px rgba(6, 214, 160, 0.3);
+        }
+
+        .screen-card.feature {
+            border: 2px solid rgba(114, 9, 183, 0.4);
+            background: linear-gradient(145deg, rgba(114, 9, 183, 0.08), rgba(114, 9, 183, 0.02));
+            box-shadow: 0 4px 20px rgba(114, 9, 183, 0.15);
+        }
+        .screen-card.feature:hover {
+            border-color: rgba(114, 9, 183, 0.8);
+            box-shadow: 0 8px 40px rgba(114, 9, 183, 0.3);
+        }
+
+        .screen-card.detail {
+            border: 2px solid rgba(255, 107, 53, 0.4);
+            background: linear-gradient(145deg, rgba(255, 107, 53, 0.08), rgba(255, 107, 53, 0.02));
+            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.15);
+        }
+        .screen-card.detail:hover {
+            border-color: rgba(255, 107, 53, 0.8);
+            box-shadow: 0 8px 40px rgba(255, 107, 53, 0.3);
+        }
+
+        .screen-header {
+            padding: 12px 16px 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .screen-icon {
+            font-size: 1.5rem;
+        }
+
+        .screen-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .screen-body {
+            padding: 8px 16px 16px;
+        }
+
+        .screen-mockup {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            padding: 10px;
+            min-height: 100px;
+        }
+
+        .mockup-line {
+            height: 6px;
+            border-radius: 3px;
+            margin-bottom: 6px;
+            opacity: 0.4;
+        }
+
+        .mockup-line.title {
+            width: 70%;
+            height: 8px;
+        }
+
+        .mockup-line.short {
+            width: 40%;
+        }
+
+        .mockup-line.medium {
+            width: 60%;
+        }
+
+        .mockup-line.full {
+            width: 100%;
+        }
+
+        .auth .mockup-line { background: #4361ee; }
+        .main .mockup-line { background: #06d6a0; }
+        .feature .mockup-line { background: #7209b7; }
+        .detail .mockup-line { background: #ff6b35; }
+
+        .mockup-button {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            margin-top: 4px;
+            color: #fff;
+        }
+
+        .auth .mockup-button { background: #4361ee; }
+        .main .mockup-button { background: #06d6a0; color: #0a0a1a;}
+        .feature .mockup-button { background: #7209b7; }
+        .detail .mockup-button { background: #ff6b35; }
+
+        .mockup-input {
+            width: 100%;
+            height: 20px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03);
+            margin-bottom: 6px;
+        }
+
+        .mockup-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 4px;
+        }
+
+        .auth .mockup-avatar { background: rgba(67, 97, 238, 0.4); }
+        .main .mockup-avatar { background: rgba(6, 214, 160, 0.4); }
+        .feature .mockup-avatar { background: rgba(114, 9, 183, 0.4); }
+        .detail .mockup-avatar { background: rgba(255, 107, 53, 0.4); }
+
+        .mockup-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            padding: 6px 8px;
+            margin-bottom: 4px;
+        }
+
+        .mockup-card .mockup-line {
+            margin-bottom: 3px;
+        }
+
+        .mockup-kanban {
+            display: flex;
+            gap: 4px;
+        }
+
+        .mockup-kanban-col {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 4px;
+            padding: 4px;
+        }
+
+        .mockup-kanban-col .col-title {
+            font-size: 0.5rem;
+            text-align: center;
+            margin-bottom: 4px;
+            opacity: 0.6;
+            color: #fff;
+        }
+
+        .mockup-kanban-item {
+            height: 14px;
+            border-radius: 3px;
+            margin-bottom: 3px;
+            opacity: 0.5;
+        }
+
+        .feature .mockup-kanban-item { background: #7209b7; }
+
+        .mockup-calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+        }
+
+        .mockup-calendar-day {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.03);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.4rem;
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .mockup-calendar-day.active {
+            background: rgba(114, 9, 183, 0.4);
+            color: #fff;
+        }
+
+        .mockup-stat-row {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 6px;
+        }
+
+        .mockup-stat-card {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            padding: 6px;
+            text-align: center;
+        }
+
+        .mockup-stat-card .number {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #06d6a0;
+        }
+
+        .mockup-stat-card .label {
+            font-size: 0.4rem;
+            opacity: 0.5;
+            color: #fff;
+        }
+
+        .screen-file {
+            padding: 6px 16px 12px;
+            font-size: 0.6rem;
+            color: rgba(255, 255, 255, 0.3);
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Arrow */
+        .arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            flex-shrink: 0;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 1.5rem;
+            position: relative;
+        }
+
+        .arrow::before {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        }
+
+        .arrow::after {
+            content: '→';
+            position: relative;
+            z-index: 1;
+        }
+
+        .arrow.down {
+            width: auto;
+            height: 50px;
+            flex-direction: column;
+        }
+
+        .arrow.down::before {
+            width: 2px;
+            height: 30px;
+            background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        }
+
+        .arrow.down::after {
+            content: '↓';
+        }
+
+        /* Branch Container */
+        .branch-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 20px;
+            flex-wrap: wrap;
+            position: relative;
+            padding-top: 40px;
+        }
+
+        .branch-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+        }
+
+        .branch-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+        }
+
+        .branch-line {
+            width: 2px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Sub screens */
+        .sub-screens {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .screen-card.small {
+            width: 160px;
+        }
+
+        .screen-card.small .screen-mockup {
+            min-height: 60px;
+        }
+
+        /* Separator */
+        .flow-separator {
+            text-align: center;
+            margin: 40px 0;
+            position: relative;
+        }
+
+        .flow-separator::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        }
+
+        .flow-separator span {
+            position: relative;
+            background: #0a0a1a;
+            padding: 0 20px;
+            font-size: 0.85rem;
+            color: #666;
+            font-weight: 500;
+        }
+
+        /* Navigation Dots */
+        .nav-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 40px 0 20px;
+        }
+
+        .nav-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-dot.active {
+            background: #4361ee;
+            width: 24px;
+            border-radius: 4px;
+        }
+
+        /* Bottom Bar Mockup */
+        .mockup-bottom-bar {
+            display: flex;
+            justify-content: space-around;
+            padding: 6px 0;
+            margin-top: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .mockup-bottom-bar .bar-item {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            opacity: 0.3;
+        }
+
+        .main .mockup-bottom-bar .bar-item { background: #06d6a0; }
+        .main .mockup-bottom-bar .bar-item.active { opacity: 0.8; }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: #555;
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .flow-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .arrow {
+                transform: rotate(90deg);
+                width: auto;
+                height: 40px;
+            }
+            .branch-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .header h1 {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .screen-card {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .screen-card:nth-child(1) { animation-delay: 0.1s; }
+        .screen-card:nth-child(2) { animation-delay: 0.2s; }
+        .screen-card:nth-child(3) { animation-delay: 0.3s; }
+        .screen-card:nth-child(4) { animation-delay: 0.4s; }
+        .screen-card:nth-child(5) { animation-delay: 0.5s; }
+
+        /* Tooltip */
+        .screen-card .tooltip {
+            display: none;
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: #fff;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            z-index: 100;
+            pointer-events: none;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .screen-card:hover .tooltip {
+            display: block;
+        }
+
+        .connection-label {
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.4);
+            text-align: center;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <h1>🗺️ UI Flow Diagram</h1>
+        <p>Ứng Dụng Quản Lý Công Việc Nhóm — Team Task Manager</p>
+    </div>
+
+    <!-- Legend -->
+    <div class="legend">
+        <div class="legend-item">
+            <div class="legend-dot" style="background: #4361ee;"></div>
+            <span>Authentication</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-dot" style="background: #06d6a0;"></div>
+            <span>Main Navigation</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-dot" style="background: #7209b7;"></div>
+            <span>Feature Screens</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-dot" style="background: #ff6b35;"></div>
+            <span>Detail / Form Screens</span>
+        </div>
+    </div>
+
+    <div class="flow-container">
+
+        <!-- ===== SECTION 1: Authentication Flow ===== -->
+        <div class="flow-section">
+            <div class="section-title">1. Authentication Flow</div>
+
+            <div class="flow-row">
+                <!-- Splash Screen -->
+                <div class="screen-card auth">
+                    <div class="tooltip">Kiểm tra trạng thái đăng nhập</div>
+                    <div class="screen-header">
+                        <span class="screen-icon">🚀</span>
+                        <span class="screen-name">Splash Screen</span>
+                    </div>
+                    <div class="screen-body">
+                        <div class="screen-mockup" style="display:flex; align-items:center; justify-content:center; flex-direction:column;">
+                            <div style="font-size:2rem; margin-bottom:8px;">📋</div>
+                            <div class="mockup-line title" style="margin:0 auto 4px;"></div>
+                            <div style="font-size:0.5rem; opacity:0.4; color:#fff;">Loading...</div>
+                        </div>
+                    </div>
+                    <div class="screen-file">splash_screen.dart</div>
+                </div>
+
+                <div class="arrow"><span></span></div>
+
+                <!-- Login Screen -->
+                <div class="screen-card auth">
+                    <div class="tooltip">Đăng nhập bằng Email/Password hoặc Social</div>
+                    <div class="screen-header">
+                        <span class="screen-icon">🔐</span>
+                        <span class="screen-name">Login Screen</span>
+                    </div>
+                    <div class="screen-body">
+                        <div class="screen-mockup">
+                            <div class="mockup-line title"></div>
+                            <div class="mockup-input"></div>
+                            <div class="mockup-input"></div>
+                            <div class="mockup-button" style="width:100%; text-align:center;">Đăng nhập</div>
+                            <div style="margin-top:6px; display:flex; justify-content:space-between;">
+                                <span style="font-size:0.5rem; opacity:0.4; color:#4361ee;">Đăng ký</span>
+                                <span style="font-size:0.5rem; opacity:0.4; color:#4361ee;">Quên MK?</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="screen-file">login_screen.dart</div>
+                </div>
+
+                <div class="arrow"><span></span></div>
+
+                <!-- Home Dashboard -->
+                <div class="screen-card main">
+                    <div class="tooltip">Trang chủ - Tổng quan Dashboard</div>
+                    <div class="screen-header">
+                        <span class="screen-icon">🏠</span>
+                        <span class="screen-name">Home Dashboard</span>
+                    </div>
+                    <div class="screen-body">
+                        <div class="screen-mockup">
+                            <div class="mockup-stat-row">
+                                <div class="mockup-stat-card">
+                                    <div class="number">12</div>
+                                    <div class="label">Tasks</div>
+                                </div>
+                                <div class="mockup-stat-card">
+                                    <div class="number">5</div>
+                                    <div class="label">Done</div>
+                                </div>
+                                <div class="mockup-stat-card">
+                                    <div class="number">3</div>
+                                    <div class="label">Due</div>
+                                </div>
+                            </div>
+                            <div class="mockup-card">
+                                <div class="mockup-line medium"></div>
+                                <div class="mockup-line short"></div>
+                            </div>
+                            <div class="mockup-card">
+                                <div class="mockup-line medium"></div>
+                                <div class="mockup-line short"></div>
+                            </div>
+                            <div class="mockup-bottom-bar">
+                                <div class="bar-item active"></div>
+                                <div class="bar-item"></div>
+                                <div class="bar-item"></div>
+                                <div class="bar-item"></div>
+                                <div class="bar-item"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="screen-file">home_screen.dart</div>
+                </div>
+            </div>
+
+            <!-- Sub Auth Screens -->
+            <div class="sub-screens">
+                <div class="screen-card auth small">
+                    <div class="tooltip">Form đăng ký tài khoản mới</div>
+                    <div class="screen-header">
+                        <span class="screen-icon">📝</span>
+                        <span class="screen-name">Register</span>
+                    </div>
+                    <div class="screen-body">
+                        <div class="screen-mockup">
+                            <div class="mockup-input"></div>
+                            <div class="mockup-input"></div>
+                            <div class="mockup-input"></div>
+                            <div class="mockup-button" style="width:100%; text-align:center;">Đăng ký</div>
+                        </div>
+                    </div>
+                    <div class="screen-file">register_screen.dart</div>
+                </div>
+
+                <div class="screen-card auth small">
+                    <div class="tooltip">Gửi email reset mật khẩu</div>
+                    <div class="screen-header">
+                        <span class="screen-icon">🔑</span>
+                        <span class="screen-name">Forgot Password</span>
+                    </div>
+                    <div class="screen-body">
+                        <div class="screen-mockup">
+                            <div class="mockup-line medium"></div>
+                            <div class="mockup-input"></div>
+                            <div class="mockup-button" style="width:100%; text-align:center;">Gửi email</div>
+                        </div>
+                    </div>
+                    <div class="screen-file">forgot_password_screen.dart</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flow-separator"><span>Sau khi đăng nhập thành công</span></div>
+
+        <!-- ===== SECTION 2: Main Navigation ===== -->
+        <div class="flow-section">
+            <div class="section-title">2. Main Navigation (Bottom Tab Bar)</div>
+
+            <div class="branch-container">
+                <!-- Kanban Board -->
+                <div class="branch-item">
+                    <div class="branch-line"></div>
+                    <div class="screen-card feature">
+                        <div class="tooltip">Drag & Drop task giữa các cột</div>
+                        <div class="screen-header">
+                            <span class="screen-icon">📊</span>
+                            <span class="screen-name">Kanban Board</span>
+                        </div>
+                        <div class="screen-body">
+                            <div class="screen-mockup">
+                                <div class="mockup-kanban">
+                                    <div class="mockup-kanban-col">
+                                        <div class="col-title">To Do</div>
+                                        <div class="mockup-kanban-item"></div>
+                                        <div class="mockup-kanban-item"></div>
+                                        <div class="mockup-kanban-item"></div>
+                                    </div>
+                                    <div class="mockup-kanban-col">
+                                        <div class="col-title">In Progress</div>
+                                        <div class="mockup-kanban-item"></div>
+                                        <div class="mockup-kanban-item"></div>
+                                    </div>
+                                    <div class="mockup-kanban-col">
+                                        <div class="col-title">Done</div>
+                                        <div class="mockup-kanban-item"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="screen-file">kanban_board_screen.dart</div>
+                    </div>
+                </div>
+
+                <!-- Project List -->
+                <div class="branch-item">
+                    <div class="branch-line"></div>
+                    <div class="screen-card feature">
+                        <div class="tooltip">Danh sách dự án & tiến độ</div>
+                        <div class="screen-header">
+                            <span class="screen-icon">📂</span>
+                            <span class="screen-name">Project List</span>
+                        </div>
+                        <div class="screen-body">
+                            <div class="screen-mockup">
+                                <div class="mockup-card">
+                                    <div class="mockup-line medium"></div>
+                                    <div class="mockup-line full" style="height:4px; border-radius:2px;"></div>
+                                </div>
+                                <div class="mockup-card">
+                                    <div class="mockup-line medium"></div>
+                                    <div class="mockup-line short" style="height:4px; border-radius:2px;"></div>
+                                </div>
+                                <div class="mockup-card">
+                                    <div class="mockup-line medium"></div>
+                                    <div class="mockup-line medium" style="height:4px; border-radius:2px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="screen-file">project_list_screen.dart</div>
+                    </div>
+                </div>
+
+                <!-- Team -->
+                <div class="branch-item">
+                    <div class="branch-line"></div>
+                    <div class="screen-card feature">
+                        <div class="tooltip">Quản lý thành viên & phân quyền</div>
+                        <div class="screen-header">
+                            <span class="screen-icon">👥</span>
+                            <span class="screen-name">Team</span>
+                        </div>
+                        <div class="screen-body">
+                            <div class="screen-mockup">
+                                <div class="mockup-card" style="display:flex; align-items:center; gap:6px;">
+                                    <div class="mockup-avatar"></div>
+                                    <div style="flex:1;">
+                                        <div class="mockup-line medium"></div>
+                                        <div class="mockup-line short" style="height:4px;"></div>
+                                    </div>
+                                </div>
+                                <div class="mockup-card" style="display:flex; align-items:center; gap:6px;">
+                                    <div class="mockup-avatar"></div>
+                                    <div style="flex:1;">
+                                        <div class="mockup-line medium"></div>
+                                        <div class="mockup-line short" style="height:4px;"></div>
+                                    </div>
+                                </div>
+                                <div class="mockup-button" style="width:100%; text-align:center; margin-top:6px;">+ Invite</div>
+                            </div>
+                        </div>
+                        <div class="screen-file">team_list_screen.dart</div>
+                    </div>
+                </div>
+
+                <!-- Calendar -->
+                <div class="branch-item">
+                    <div class="branch-line"></div>
+                    <div class="screen-card feature">
+                        <div class="tooltip">Lịch deadline & timeline</div>
+                        <div class="screen-header">
+                            <span class="screen-icon">📅</span>
+                            <span class="screen-name">Calendar</span>
+                        </div>
+                        <div class="screen-body">
+                            <div class="screen-mockup">
+                                <div class="mockup-calendar">
+                                    <div class="mockup-calendar-day">1</div>
+                                    <div class="mockup-calendar-day">2</div>
+                                    <div class="mockup-calendar-day">3</div>
+                                    <div class="mockup-calendar-day active">4</div>
+                                    <div class="mockup-calendar-day">5</div>
+                                    <div class="mockup-calendar-day">6</div>
+                                    <div class="mockup-calendar-day">7</div>
+                                    <div class="mockup-calendar-day">8</div>
+                                    <div class="mockup-calendar-day">9</div>
+                                    <div class="mockup-calendar-day active">10</div>
+                                    <div class="mockup-calendar-day">11</div>
+                                    <div class="mockup-calendar-day">12</div>
+                                    <div class="mockup-calendar-day">13</div>
+                                    <div class="mockup-calendar-day">14</div>
+                                    <div class="mockup-calendar-day active">15</div>
+                                    <div class="mockup-calendar-day">16</div>
+                                    <div class="mockup-calendar-day">17</div>
+                                    <div class="mockup-calendar-day">18</div>
+                                    <div class="mockup-calendar-day">19</div>
+                                    <div class="mockup-calendar-day">20</div>
+                                    <div class="mockup-calendar-day">21</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="screen-file">calendar_screen.dart</div>
+                    </div>
+                </div>
+
+                <!-- Profile -->
+                <div class="branch-item">
+                    <div class="branch-line"></div>
+                    <div class="screen-card feature">
+                        <div class="tooltip">Thông tin cá nhân & cài đặt</div>
+                        <div class="screen-header">
+                            <span class="screen-icon">👤</span>
+                            <span class="screen-name">Profile</span>
+                        </div>
+                        <div class="screen-body">
+                            <div class="screen-mockup" style="text-align:center;">
+                                <div class="mockup-avatar" style="width:40px; height:40px; margin:0 auto 8px;"></div>
+                                <div class="mockup-line medium" style="margin:0 auto 4px;"></div>
+                                <div class="mockup-line short" style="margin:0 auto 8px;"></div>
+                                <div class="mockup-card">
+                                    <div class="mockup-line full"></div>
+                                </div>
+                                <div class="mockup-card">
+                                    <div class="mockup-line full"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="screen-file">profile_screen.dart</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flow-separator"><span>Màn hình chi tiết (điều hướng từ các tab)</span></div>
+
+        <!-- ===== SECTION 3: Detail Screens ===== -->
+        <div class="flow-section">
+            <div class="section-title">3. Detail & Form Screens</div>
+
+            <div class="branch-container" style="padding-top:20px;">
+                <!-- Task Detail -->
+                <div class="branch-item">
+                    <div class="screen-card detail">
+                        <div class="tooltip">Chi tiết task - Comments - Attachments</div>
+                        <div class="screen-header">
+                            <span class="screen-icon">📝</span>
+                            <span class="screen-name">Task Detail</span>
+                        </div>
+                        <div class="screen-body">
+                            <div class="screen-mockup">
+                                <div class="mockup-line title"></div>
+                                <div class="mockup-line full"></div>
+                                <div class="mockup-line medium"></div>
+                                <div style="display:flex; gap:4px; margin:6px 0;">
+                                    <div class="mockup-avatar"></div>
+                                    <div style="flex:1;">
+                                        <div class="mockup-line short" style="height:4px;"></div>
+                                    </div>
+                                    <div class="mockup-button" style="font-size:0.5rem; padding:2px 6px;">High</div>
+                                </div>
+                                <div class="mockup-card">
+                                    <div class="mockup-line medium" style="height:4px;"></div>
+                                    <div class="mockup-line short" style="height:4px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="screen-file">task_detail_screen.dart</div>
+                    </div>
+                    <div class="connection-label">từ Kanban / Project</div>
+                </div>
+
+                <!-- Create/Edit Task -->
+                <div class="branch-item">
+                    <div class="screen-card detail">
+                        <div class="tooltip">Form tạo mới / chỉnh sửa task</div>
+                        <div class="screen-header">
+                            <span class="screen-icon">➕</span>
+                            <span class="screen-name">Create / Edit Task</span>
+                        </div>
+                        <div class="screen-body">
+                            <div class="screen-mockup">
+                                <div class="mockup-line short" style="height:4px; margin-bottom:2px;"></div>
+                                <div class="mockup-input"></div>
+                                <div class="mockup-line short" style="height:4px; margin-bottom:2px;"></div>
+                                <div class="mockup-input" style="height:40px;"></div>
+                                <div class="mockup-line short" style="height:4px; margin-bottom:2px;"></div>
+                                <div class="mockup-input"></div>
+                                <div class="mockup-button" style="width:100%; text-align:center; margin-top:4px;">Lưu Task</div>
+                            </div>
+                        </div>
+                        <div class="screen-file">create_task_screen.dart</div>
+                    </div>
+                    <div class="connection-label">từ Kanban / Task Detail</div>
+                </div>
+
+                <!-- Project Detail -->
+                <div class="branch-item">
+                    <div class="screen-card detail">
+                        <div class="tooltip">Chi tiết dự án - Tasks & Members</div>
+                        <div class="screen-header">
+                            <span class="screen-icon">📄</span>
+                            <span class="screen-name">Project Detail</span>
+                        </div>
+                        <div class="screen-body">
+                            <div class="screen-mockup">
+                                <div class="mockup-line title"></div>
+                                <div style="display:flex; gap:2px; margin:6px 0;">
+                                    <div class="mockup-avatar"></div>
+                                    <div class="mockup-avatar"></div>
+                                    <div class="mockup-avatar"></div>
+                                </div>
+                                <div class="mockup-card">
+                                    <div class="mockup-line medium"></div>
+                                </div>
+                                <div class="mockup-card">
+                                    <div class="mockup-line medium"></div>
+                                </div>
+                                <div class="mockup-line full" style="height:4px; border-radius:2px; margin-top:6px;"></div>
+                            </div>
+                        </div>
+                        <div class="screen-file">project_detail_screen.dart</div>
+                    </div>
+                    <div class="connection-label">từ Project List</div>
+                </div>
+
+                <!-- Notification -->
+                <div class="branch-item">
+                    <div class="screen-card detail">
+                        <div class="tooltip">Thông báo - Task assigned, Comments</div>
+                        <div class="screen-header">
+                            <span class="screen-icon">🔔</span>
+                            <span class="screen-name">Notifications</span>
+                        </div>
+                        <div class="screen-body">
+                            <div class="screen-mockup">
+                                <div class="mockup-card" style="border-left: 2px solid #ff6b35;">
+                                    <div class="mockup-line medium"></div>
+                                    <div class="mockup-line short" style="height:4px;"></div>
+                                </div>
+                                <div class="mockup-card" style="opacity:0.5;">
+                                    <div class="mockup-line medium"></div>
+                                    <div class="mockup-line short" style="height:4px;"></div>
+                                </div>
+                                <div class="mockup-card" style="opacity:0.5;">
+                                    <div class="mockup-line medium"></div>
+                                    <div class="mockup-line short" style="height:4px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="screen-file">notification_screen.dart</div>
+                    </div>
+                    <div class="connection-label">từ Home (bell icon)</div>
+                </div>
+
+                <!-- Invite Member -->
+                <div class="branch-item">
+                    <div class="screen-card detail">
+                        <div class="tooltip">Mời thành viên qua email/link</div>
+                        <div class="screen-header">
+                            <span class="screen-icon">✉️</span>
+                            <span class="screen-name">Invite Member</span>
+                        </div>
+                        <div class="screen-body">
+                            <div class="screen-mockup">
+                                <div class="mockup-line short" style="height:4px; margin-bottom:2px;"></div>
+                                <div class="mockup-input"></div>
+                                <div class="mockup-line short" style="height:4px; margin-bottom:2px;"></div>
+                                <div class="mockup-input"></div>
+                                <div class="mockup-button" style="width:100%; text-align:center; margin-top:6px;">Gửi lời mời</div>
+                            </div>
+                        </div>
+                        <div class="screen-file">invite_member_screen.dart</div>
+                    </div>
+                    <div class="connection-label">từ Team</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flow-separator"><span>Sơ đồ kết nối tổng thể</span></div>
+
+        <!-- ===== SECTION 4: Complete Flow Summary ===== -->
+        <div class="flow-section">
+            <div class="section-title">4. Tổng Kết Luồng Điều Hướng</div>
+
+            <div style="background: rgba(255,255,255,0.02); border-radius:16px; padding: 30px; border: 1px solid rgba(255,255,255,0.06);">
+                <table style="width:100%; border-collapse:collapse; font-size:0.85rem;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <th style="text-align:left; padding:10px; color:#4361ee;">Từ màn hình</th>
+                            <th style="text-align:center; padding:10px; color:#888;">→</th>
+                            <th style="text-align:left; padding:10px; color:#06d6a0;">Đến màn hình</th>
+                            <th style="text-align:left; padding:10px; color:#ff6b35;">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+                            <td style="padding:8px 10px;">🚀 Splash</td>
+                            <td style="text-align:center;">→</td>
+                            <td style="padding:8px 10px;">🔐 Login / 🏠 Home</td>
+                            <td style="padding:8px 10px; opacity:0.6;">Auto check auth</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+                            <td style="padding:8px 10px;">🔐 Login</td>
+                            <td style="text-align:center;">→</td>
+                            <td style="padding:8px 10px;">🏠 Home Dashboard</td>
+                            <td style="padding:8px 10px; opacity:0.6;">Đăng nhập thành công</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+                            <td style="padding:8px 10px;">🔐 Login</td>
+                            <td style="text-align:center;">→</td>
+                            <td style="padding:8px 10px;">📝 Register</td>
+                            <td style="padding:8px 10px; opacity:0.6;">Tap "Đăng ký"</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+                            <td style="padding:8px 10px;">🏠 Home</td>
+                            <td style="text-align:center;">→</td>
+                            <td style="padding:8px 10px;">📊 Kanban / 📂 Projects / 👥 Team / 📅 Calendar / 👤 Profile</td>
+                            <td style="padding:8px 10px; opacity:0.6;">Bottom Tab Bar</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+                            <td style="padding:8px 10px;">📊 Kanban</td>
+                            <td style="text-align:center;">→</td>
+                            <td style="padding:8px 10px;">📝 Task Detail</td>
+                            <td style="padding:8px 10px; opacity:0.6;">Tap on task card</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+                            <td style="padding:8px 10px;">📊 Kanban</td>
+                            <td style="text-align:center;">→</td>
+                            <td style="padding:8px 10px;">➕ Create Task</td>
+                            <td style="padding:8px 10px; opacity:0.6;">Tap "+" button</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+                            <td style="padding:8px 10px;">📂 Project List</td>
+                            <td style="text-align:center;">→</td>
+                            <td style="padding:8px 10px;">📄 Project Detail</td>
+                            <td style="padding:8px 10px; opacity:0.6;">Tap on project</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+                            <td style="padding:8px 10px;">📄 Project Detail</td>
+                            <td style="text-align:center;">→</td>
+                            <td style="padding:8px 10px;">📝 Task Detail / ➕ Create Task</td>
+                            <td style="padding:8px 10px; opacity:0.6;">Tap task / Tap "+"</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+                            <td style="padding:8px 10px;">👥 Team</td>
+                            <td style="text-align:center;">→</td>
+                            <td style="padding:8px 10px;">✉️ Invite Member</td>
+                            <td style="padding:8px 10px; opacity:0.6;">Tap "Invite"</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px 10px;">🏠 Home</td>
+                            <td style="text-align:center;">→</td>
+                            <td style="padding:8px 10px;">🔔 Notifications</td>
+                            <td style="padding:8px 10px; opacity:0.6;">Tap bell icon</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>📋 Team Task Manager — Đề tài 2: Ứng Dụng Quản Lý Công Việc Nhóm</p>
+        <p style="margin-top:4px;">Phan Trần Hữu Duy • Lập trình Di động</p>
+    </div>
+
+    <script>
+        // Add smooth scroll animation when cards come into view
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.screen-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'all 0.6s ease';
+            observer.observe(card);
+        });
+    </script>
+
+</body>
+</html>
