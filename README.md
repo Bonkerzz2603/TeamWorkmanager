@@ -1,8 +1,8 @@
-# 📋 Ứng Dụng Quản Lý Công Việc Nhóm (Team Task Manager)
+#  Ứng Dụng Quản Lý Công Việc Nhóm (Team Task Manager)
 
 > **Đề tài 2** - Xây dựng ứng dụng quản lý công việc và dự án theo nhóm với giao diện trực quan và đồng bộ real-time.
 
-## 📑 Mục Lục
+##  Mục Lục
 
 - [Tổng quan](#tổng-quan)
 - [Công nghệ sử dụng](#công-nghệ-sử-dụng)
@@ -16,20 +16,20 @@
 
 ---
 
-## 🎯 Tổng Quan
+##  Tổng Quan
 
 Ứng dụng **Team Task Manager** là một ứng dụng di động được xây dựng bằng **Flutter**, cho phép các nhóm làm việc:
 
-- ✅ Tạo, gán và theo dõi công việc (tasks)
-- 📊 Sử dụng **Kanban Board** để quản lý luồng công việc
-- 👥 Quản lý thành viên nhóm và phân quyền
-- 📅 Theo dõi **Timeline** và **Deadline**
-- 🔔 Nhận thông báo và cộng tác **real-time**
-- 💬 Bình luận và trao đổi trên từng task
+-  Tạo, gán và theo dõi công việc (tasks)
+-  Sử dụng **Kanban Board** để quản lý luồng công việc
+-  Quản lý thành viên nhóm và phân quyền
+-  Theo dõi **Timeline** và **Deadline**
+-  Nhận thông báo và cộng tác **real-time**
+-  Bình luận và trao đổi trên từng task
 
 ---
 
-## 🛠 Công Nghệ Sử Dụng
+##  Công Nghệ Sử Dụng
 
 | Thành phần          | Công nghệ                           | Mục đích                             |
 | ------------------- | ---------------------------------- | ------------------------------------- |
@@ -42,7 +42,7 @@
 | **State Management**| Provider / Riverpod                | Quản lý trạng thái ứng dụng           |
 | **Routing**         | GoRouter                           | Điều hướng màn hình                   |
 
-### 📦 Các Package Cần Thiết (thêm vào `pubspec.yaml`)
+###  Các Package Cần Thiết (thêm vào `pubspec.yaml`)
 
 ```yaml
 dependencies:
@@ -91,7 +91,7 @@ dependencies:
 
 ---
 
-## 🏗 Kiến Trúc Dự Án
+##  Kiến Trúc Dự Án
 
 Dự án sử dụng kiến trúc **Clean Architecture** kết hợp **MVVM Pattern**:
 
@@ -110,7 +110,7 @@ Dự án sử dụng kiến trúc **Clean Architecture** kết hợp **MVVM Patt
 
 ---
 
-## 📁 Cấu Trúc Thư Mục
+##  Cấu Trúc Thư Mục
 
 ```
 lib/
@@ -208,53 +208,53 @@ lib/
 
 ---
 
-## 🗺 Sơ Đồ UI Flow
+##  Sơ Đồ UI Flow
 
-> Xem file [`docs/ui_flow.html`](docs/ui_flow.html) để xem sơ đồ tương tác đầy đủ.
+
 
 ### Luồng điều hướng tổng quan
 
-```mermaid
+```
 flowchart TD
-    A[🚀 Splash Screen] --> B{Đã đăng nhập?}
-    B -->|Chưa| C[🔐 Login Screen]
-    B -->|Rồi| F[🏠 Home Dashboard]
+    A[ Splash Screen] --> B{Đã đăng nhập?}
+    B -->|Chưa| C[ Login Screen]
+    B -->|Rồi| F[ Home Dashboard]
     
-    C --> D[📝 Register Screen]
-    C --> E[🔑 Forgot Password]
+    C --> D[ Register Screen]
+    C --> E[ Forgot Password]
     D --> C
     E --> C
     C -->|Đăng nhập thành công| F
     
-    F --> G[📋 Kanban Board]
-    F --> H[📂 Project List]
-    F --> I[👥 Team Management]
-    F --> J[📅 Calendar View]
-    F --> K[🔔 Notifications]
-    F --> L[👤 Profile]
+    F --> G[ Kanban Board]
+    F --> H[ Project List]
+    F --> I[ Team Management]
+    F --> J[ Calendar View]
+    F --> K[ Notifications]
+    F --> L[ Profile]
     
-    H --> M[📄 Project Detail]
+    H --> M[ Project Detail]
     M --> G
-    M --> N[➕ Create Task]
+    M --> N[ Create Task]
     
-    G --> O[📝 Task Detail]
-    O --> P[✏️ Edit Task]
-    O --> Q[💬 Comments]
-    O --> R[📎 Attachments]
+    G --> O[ Task Detail]
+    O --> P[ Edit Task]
+    O --> Q[ Comments]
+    O --> R[ Attachments]
     
-    I --> S[👤 Member Detail]
-    I --> T[✉️ Invite Member]
+    I --> S[ Member Detail]
+    I --> T[Invite Member]
     
-    L --> U[✏️ Edit Profile]
-    L --> V[⚙️ Settings]
-    V --> W[🌙 Dark Mode Toggle]
+    L --> U[Edit Profile]
+    L --> V[ Settings]
+    V --> W[ Dark Mode Toggle]
 ```
 
 ### Luồng chi tiết từng nhóm màn hình
 
-```mermaid
+```
 flowchart LR
-    subgraph AUTH["🔐 Authentication Flow"]
+    subgraph AUTH[" Authentication Flow"]
         direction TB
         A1[Splash] --> A2{Check Auth}
         A2 -->|No Token| A3[Login]
@@ -266,7 +266,7 @@ flowchart LR
         A3 -->|Success| A4
     end
 
-    subgraph TASK["📋 Task Management Flow"]
+    subgraph TASK[" Task Management Flow"]
         direction TB
         B1[Kanban Board] --> B2[Task Card - Drag & Drop]
         B1 --> B3[+ New Task]
@@ -279,7 +279,7 @@ flowchart LR
         B6 --> B5
     end
 
-    subgraph TEAM["👥 Team Flow"]
+    subgraph TEAM[" Team Flow"]
         direction TB
         C1[Team List] --> C2[Team Detail]
         C2 --> C3[Member Profile]
@@ -311,9 +311,9 @@ flowchart LR
 
 ---
 
-## ✨ Yêu Cầu Tính Năng Chi Tiết
+##  Yêu Cầu Tính Năng Chi Tiết
 
-### 1. 📝 Quản Lý Task Cơ Bản (CRUD)
+### 1.  Quản Lý Task Cơ Bản (CRUD)
 
 ```
 Chức năng cần code:
@@ -335,7 +335,7 @@ Chức năng cần code:
 - `lib/screens/task/edit_task_screen.dart` - Form chỉnh sửa
 - `lib/widgets/task/task_card.dart` - Widget card hiển thị task
 
-### 2. 📂 Tổ Chức Công Việc
+### 2.  Tổ Chức Công Việc
 
 ```
 Chức năng cần code:
@@ -355,7 +355,7 @@ Chức năng cần code:
 - `lib/screens/project/create_project_screen.dart`
 - `lib/widgets/project/project_card.dart`
 
-### 3. 📊 Kanban Board
+### 3.  Kanban Board
 
 ```
 Chức năng cần code:
@@ -373,7 +373,7 @@ Chức năng cần code:
 - `lib/widgets/kanban/kanban_task_card.dart`
 - `lib/providers/kanban_provider.dart`
 
-### 4. 👥 Quản Lý Nhóm
+### 4.  Quản Lý Nhóm
 
 ```
 Chức năng cần code:
@@ -395,7 +395,7 @@ Chức năng cần code:
 - `lib/screens/team/team_detail_screen.dart`
 - `lib/screens/team/invite_member_screen.dart`
 
-### 5. 📅 Timeline và Deadline
+### 5.  Timeline và Deadline
 
 ```
 Chức năng cần code:
@@ -412,7 +412,7 @@ Chức năng cần code:
 - `lib/widgets/common/deadline_countdown.dart`
 - `lib/services/notification_service.dart`
 
-### 6. 🔄 Cộng Tác Real-time
+### 6.  Cộng Tác Real-time
 
 ```
 Chức năng cần code:
@@ -433,9 +433,9 @@ Chức năng cần code:
 
 ---
 
-## 🚀 Hướng Dẫn Các Giai Đoạn Phát Triển
+##  Hướng Dẫn Các Giai Đoạn Phát Triển
 
-### 📌 Giai đoạn 1: Thiết lập dự án (Tuần 1)
+###  Giai đoạn 1: Thiết lập dự án (Tuần 1)
 
 ```
 Checklist:
@@ -464,7 +464,7 @@ dart pub global activate flutterfire_cli
 flutterfire configure
 ```
 
-### 📌 Giai đoạn 2: Authentication (Tuần 2)
+###  Giai đoạn 2: Authentication (Tuần 2)
 
 ```
 Checklist:
@@ -507,7 +507,7 @@ class AuthService {
 }
 ```
 
-### 📌 Giai đoạn 3: Task CRUD + Kanban Board (Tuần 3-4)
+###  Giai đoạn 3: Task CRUD + Kanban Board (Tuần 3-4)
 
 ```
 Checklist:
@@ -547,7 +547,7 @@ enum TaskStatus { todo, inProgress, review, done }
 enum TaskPriority { low, medium, high, urgent }
 ```
 
-### 📌 Giai đoạn 4: Project & Team Management (Tuần 5-6)
+###  Giai đoạn 4: Project & Team Management (Tuần 5-6)
 
 ```
 Checklist:
@@ -563,7 +563,7 @@ Checklist:
 ☐ Implement role management (Admin, Member, Viewer)
 ```
 
-### 📌 Giai đoạn 5: Calendar, Notifications, Dashboard (Tuần 7-8)
+###  Giai đoạn 5: Calendar, Notifications, Dashboard (Tuần 7-8)
 
 ```
 Checklist:
@@ -577,7 +577,7 @@ Checklist:
 ☐ Activity log
 ```
 
-### 📌 Giai đoạn 6: Polish & Testing (Tuần 9-10)
+###  Giai đoạn 6: Polish & Testing (Tuần 9-10)
 
 ```
 Checklist:
@@ -596,7 +596,7 @@ Checklist:
 
 ---
 
-## 💻 Hướng Dẫn Cài Đặt và Chạy
+##  Hướng Dẫn Cài Đặt và Chạy
 
 ### Yêu cầu hệ thống
 
@@ -725,7 +725,7 @@ service cloud.firestore {
 
 ---
 
-## 📚 Tài Liệu Tham Khảo
+##  Tài Liệu Tham Khảo
 
 - [Flutter Documentation](https://docs.flutter.dev/)
 - [Firebase for Flutter](https://firebase.google.com/docs/flutter/setup)
@@ -737,11 +737,10 @@ service cloud.firestore {
 
 ---
 
-## 👨‍💻 Tác Giả
+##  Tác Giả
 
-- **Phan Trần Hữu Duy**
+- **Phan Trần Hữu Duy - Nguyễn Gia Khang**
 - Đồ án Lập trình Di động - Đề tài 2
 
 ---
 
-> 💡 **Mẹo:** Bắt đầu từ Authentication → Task CRUD → Kanban Board, rồi mới làm các tính năng nâng cao. Mỗi giai đoạn nên test kỹ trước khi sang giai đoạn tiếp theo.
